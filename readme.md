@@ -42,3 +42,20 @@ So back to step 1. I rewrote the lockdown test to cover all sell in dates betwee
 Run test with original updateQuality, Approve.
 Rerun test with my version. Green.
 Commit. Tag v0.4. Push to github. 
+
+5. Implement Conjured Item type
+Separated quality logic from sellIn logic in ItemType
+TDD Conjured ItemType.
+Created enum Quality and class ItemNames (single responsability)
+Last, I should have deleted GildedRose.toString and GildedRoseTest lockdown test, but they are still useful as there aren't other tests for GildedRose class. So, I added a conjured item to the list, rerun the test ad approved the new 'true' result.
+Commit. Tag v1. Push to github.
+
+That's all
+
+What have I learned
+- some basic git commands
+- 100% code coverage hides some possibles pitfalls. ApprovalTests should be executed with more values than those necessary for 100% coverage. One should look at the code and decide if there are enough combinations.
+- shortcuts Eclipse : CTRL+F6, Alt+Shift+X+T, Alt+Shift+E+T / Chrome : Ctrl+L. I need a lot more practice without mouse.
+- Some maven 'magic' to create project local repositories for libs that aren't present in any public repository
+
+    

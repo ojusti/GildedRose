@@ -2,7 +2,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class NormalItemTypeTest
+
+
+public class ConjuredItemTypeTest
 {
     private static final int YESTERDAY = -1;
     private static final int IN_A_YEAR = 365;
@@ -10,49 +12,50 @@ public class NormalItemTypeTest
     private Item item;
     
     @Test
-    public void normalItemsQualityDecreasesFromMaxToMinWhenSellInDateIsInTheFuture() throws Exception
+    public void conjuredItemsQualityDecreasesAtDoubleRateFromMaxToMinWhenSellInDateIsInTheFuture() throws Exception
     {
-        item = aNormalItem(sell(IN_A_YEAR), Quality.max());
+        item = aConjuredItem(sell(IN_A_YEAR), Quality.max());
         
         for(int quality = item.getQuality(); quality > Quality.min(); quality = item.getQuality())
         {
             updateQuality();
-            assertEquals(quality - 1, item.getQuality());
+            assertEquals(quality - 2, item.getQuality());
         }
     }
     
     @Test
-    public void normalItemsQualityDecreasesTwiceAsFastAfterTheSellInDate() 
+    public void conjuredItemsQualityDecreasesTwiceAsFastAfterTheSellInDate() 
     {
-        item = aNormalItem(sell(TODAY), Quality.max());
+        item = aConjuredItem(sell(TODAY), Quality.max());
         
+        int quality = item.getQuality();
         updateQuality();
         assertEquals(YESTERDAY, item.getSellIn());
-        assertEquals(Quality.max() - 2, item.getQuality());
+        assertEquals(quality - 4, item.getQuality());
     }
     
     @Test
-    public void normalItemsQualityNeverGetsBeyondMin() 
+    public void conjuredItemsQualityNeverGetsBeyondMin() 
     {
-        item = aNormalItem(sell(TODAY), Quality.min() + 1);
+        item = aConjuredItem(sell(TODAY), Quality.min() + 1);
         
         updateQuality();
         assertEquals(YESTERDAY, item.getSellIn());
         assertEquals(Quality.min(), item.getQuality());
     }
 
-    private Item aNormalItem(int sellIn, int quality)
+    private Item aConjuredItem(int sellIn, int quality)
     {
-        return new Item("a normal item", sellIn, quality);
+        return new Item(ItemNames.CONJURED_MANA_CAKE, sellIn, quality);
     }
     
     private int sell(int sellIn)
     {
         return sellIn;
     }
-    
+
     private void updateQuality()
     {
-        ItemType.NORMAL.updateQuality(item);
+        ItemType.CONJURED.updateQuality(item);
     }
 }

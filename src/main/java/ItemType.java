@@ -2,9 +2,8 @@ public enum ItemType
 {
     NORMAL
     {
-        public void updateQuality(Item item)
+        @Override protected void modifyQuality(Item item)
         {
-            decrementSellIn(item);
             int quality = item.getQuality();
             
             quality--;
@@ -12,15 +11,13 @@ public enum ItemType
             {
                 quality--;
             }
-            item.setQuality(Math.max(quality, GildedRose.MIN_QUALITY));
+            item.setQuality(Quality.constrain(quality));
         }
     },
     AGED_BRIE
     {
-        @Override
-        public void updateQuality(Item item)
+        @Override protected void modifyQuality(Item item)
         {
-            decrementSellIn(item);
             int quality = item.getQuality();
             
             quality++;
@@ -28,20 +25,17 @@ public enum ItemType
             {
                 quality++;
             }
-            item.setQuality(Math.min(quality, GildedRose.MAX_QUALITY));
+            item.setQuality(Quality.constrain(quality));
         }
     },
     BACKSTAGE_PASSES
     {
-        @Override
-        public void updateQuality(Item item)
+        @Override protected void modifyQuality(Item item)
         {
-            decrementSellIn(item);
-            int sellIn = item.getSellIn();
-            
             int quality = item.getQuality();
             quality++;
             
+            int sellIn = item.getSellIn();
             if(sellIn < DOUBLE_QUALITY_THRESHOLD)
             {
                 quality++;
@@ -54,23 +48,29 @@ public enum ItemType
             {
                 quality = 0;
             }
-            item.setQuality(Math.min(quality, GildedRose.MAX_QUALITY));
 
+            item.setQuality(Quality.constrain(quality));
         }
     },
     CONJURED
     {
-        @Override
-        public void updateQuality(Item item)
+        @Override protected void modifyQuality(Item item)
         {
-            // TODO Auto-generated method stub
-            NORMAL.updateQuality(item);
-
+            NORMAL.modifyQuality(item);
+            NORMAL.modifyQuality(item);
         }
     },
-    LEGENDARY { @Override public void updateQuality(Item item) { } };
+    LEGENDARY 
+    { 
+        @Override protected void decrementSellIn(Item item) { } 
+        @Override protected void modifyQuality(Item item) { }
+    };
 
-    public abstract void updateQuality(Item item);
+    public void updateQuality(Item item)
+    {
+        decrementSellIn(item);
+        modifyQuality(item);
+    }
 
     protected final static int TODAY = 0;
     protected final static int DOUBLE_QUALITY_THRESHOLD = 10;
@@ -79,5 +79,6 @@ public enum ItemType
     {
         item.setSellIn(item.getSellIn() - 1);
     }
-
+    
+    protected abstract void modifyQuality(Item item);
 }

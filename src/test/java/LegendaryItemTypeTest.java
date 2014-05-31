@@ -4,7 +4,6 @@ import org.junit.Test;
 
 public class LegendaryItemTypeTest
 {
-    private static final ItemType legendaryItems = ItemType.LEGENDARY;
     private Item item;
     
     @Test
@@ -13,18 +12,18 @@ public class LegendaryItemTypeTest
         item = legendaryItem();
         int sellIn = item.getSellIn();
         updateQuality();
-        assertEquals(GildedRose.SULFURAS_QUALITY, item.getQuality());
+        assertEquals(Quality.legendary(), item.getQuality());
         assertEquals(sellIn, item.getSellIn());
-    }
-
-    private void updateQuality()
-    {
-        legendaryItems.updateQuality(item);
     }
 
     private Item legendaryItem()
     {
-        return new Item(GildedRose.SULFURAS_HAND_OF_RAGNAROS, 0, GildedRose.SULFURAS_QUALITY);
+        return new Item(ItemNames.SULFURAS_HAND_OF_RAGNAROS, 0, Quality.legendary());
+    }
+    
+    private void updateQuality()
+    {
+        ItemType.LEGENDARY.updateQuality(item);
     }
     
 }
