@@ -46,79 +46,22 @@ public class GildedRose {
     {
         for(Item item : items)
         {
-			if ((!AGED_BRIE.equals(item.getName())) && !BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT.equals(item.getName())) 
-            {
-                if (item.getQuality() > MIN_QUALITY)
-                {
-                    if (!SULFURAS_HAND_OF_RAGNAROS.equals(item.getName()))
-                    {
-                        item.setQuality(item.getQuality() - 1);
-                    }
-                }
-            }
-            else
-            {
-                if (item.getQuality() < MAX_QUALITY)
-                {
-                    item.setQuality(item.getQuality() + 1);
-
-                    if (BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT.equals(item.getName()))
-                    {
-                        if (item.getSellIn() < 11)
-                        {
-                            if (item.getQuality() < MAX_QUALITY)
-                            {
-                                item.setQuality(item.getQuality() + 1);
-                            }
-                        }
-
-                        if (item.getSellIn() < 6)
-                        {
-                            if (item.getQuality() < MAX_QUALITY)
-                            {
-                                item.setQuality(item.getQuality() + 1);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!SULFURAS_HAND_OF_RAGNAROS.equals(item.getName()))
-            {
-                item.setSellIn(item.getSellIn() - 1);
-            }
-
-            if (item.getSellIn() < 0)
-            {
-                if (!AGED_BRIE.equals(item.getName()))
-                {
-                    if (!BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT.equals(item.getName()))
-                    {
-                        if (item.getQuality() > MIN_QUALITY)
-                        {
-                            if (!SULFURAS_HAND_OF_RAGNAROS.equals(item.getName()))
-                            {
-                                item.setQuality(item.getQuality() - 1);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        item.setQuality(item.getQuality() - item.getQuality());
-                    }
-                }
-                else
-                {
-                    if (item.getQuality() < MAX_QUALITY)
-                    {
-                        item.setQuality(item.getQuality() + 1);
-                    }
-                }
-            }
+            ItemType type = getType(item);
+            type.updateQuality(item);
+        }
+    }
+    
+    private ItemType getType(Item item)
+    {
+        switch(item.getName())
+        {
+            case AGED_BRIE: return ItemType.AGED_BRIE;
+            case SULFURAS_HAND_OF_RAGNAROS: return ItemType.LEGENDARY;
+            case BACKSTAGE_PASSES_TO_A_TAFKAL80ETC_CONCERT: return ItemType.BACKSTAGE_PASSES;
+            default: return ItemType.NORMAL;
         }
     }
 
-    @Override
     public String toString() 
     {
     	StringBuilder builder = new StringBuilder().append(items.size()).append(" items : ");
